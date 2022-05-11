@@ -1,15 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { ListGroup, ListGroupItem } from 'reactstrap'
 
 function CategoryList(props) {
     
-    const [categories, setCategories] = useState([
-        {categoryId: 1, categoryName: "Beverages"},
-        {categoryId: 2, categoryName: "Pastas"},
-
-    ]);
+    const [categories, setCategories] = useState();
+    
 
     const [categoryNameDisplay,setcategoryNameDisplay] = useState();
+
+     useEffect(() =>{
+        fetch("http://localhost:3000/categories")
+        .then(res => {
+            return res.json()})
+        .then(data => {
+            console.log(data)
+            setCategories(data)})
+      },[]);
     
     const changeCategory = (category) => {
         setcategoryNameDisplay(category.categoryName)
@@ -22,11 +28,11 @@ function CategoryList(props) {
                     {props.info.title}
                 </h2>
 
-                <ListGroup>
+                {categories && <ListGroup>
                     {
-                        categories.map(category => (<ListGroupItem onClick={() => changeCategory(category)} key={category.categoryId}>{category.categoryName}</ListGroupItem>))
+                        categories.map(category => (<ListGroupItem onClick={() => changeCategory(category)} key={category.id}>{category.categoryName}</ListGroupItem>))
                     }
-                </ListGroup>
+                </ListGroup>}
             
                     <h4>
                         {categoryNameDisplay}
