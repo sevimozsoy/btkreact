@@ -5,14 +5,11 @@ function ProductList(props) {
 
 
     const [productsHooks] = useState(props.products);
-
-
     return (
         <div>
             <h2>{props.info.title}</h2>
 
-            <Table
-            >
+            <Table>
                 <thead>
                     <tr>
                         <th>
@@ -32,7 +29,7 @@ function ProductList(props) {
                         </th>
                     </tr>
                 </thead>
-                {productsHooks && <tbody>
+                <tbody>
                     {
                         productsHooks.map(product => (
                             <tr key={product.id}>
@@ -43,7 +40,7 @@ function ProductList(props) {
                                 <td>{product.unitsInStock}</td>
                             </tr>))
                     }
-                </tbody>}
+                </tbody>
             </Table>
         </div>
     )

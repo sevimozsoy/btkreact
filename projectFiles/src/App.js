@@ -1,27 +1,32 @@
-import React, { useState, useEffect } from 'react'
-import { Container, Row, Col } from 'reactstrap';
-import CategoryList from './CategoryList';
-import Nav from './Nav';
-import ProductList from './ProductList';
-
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col } from "reactstrap";
+import CategoryList from "./CategoryList";
+import Nav from "./Nav";
+import ProductList from "./ProductList";
 
 function App() {
-
-  let productInfo = { title: "Product List" }
-  let categoryInfo = { title: "Category List" }
+  let productInfo = { title: "Product List" };
+  let categoryInfo = { title: "Category List" };
   //encapsulation
 
-  const [productsWithoutRedux, setProductsWithoutRedux] = useState();
+  const [productsWithoutRedux, setProductsWithoutRedux] = useState(null);
+  const [id,setId] = useState();
+
+  let url = "http://localhost:3000/products";
+  if (id) {
+    url += "?categoryId=" + id
+    console.log(url)
+  }
 
   useEffect(() => {
-    fetch("http://localhost:3000/products")
-      .then(res => {
-        return res.json()
+    fetch(url)
+      .then((res) => {
+        return res.json();
       })
-      .then(data => {
-        setProductsWithoutRedux(data)
-      })
-  }, []);
+      .then((data) => {
+        setProductsWithoutRedux(data);
+      });
+  }, [id]);
 
   return (
     <div>
@@ -31,17 +36,15 @@ function App() {
         </Row>
         <Row>
           <Col xs="3">
-            <CategoryList info={categoryInfo} />
+            <CategoryList info={categoryInfo} id={id} setId={setId}/>
           </Col>
           <Col xs="9">
-            <ProductList
-              products={productsWithoutRedux}
-              info={productInfo} />
+            {productsWithoutRedux && (
+              <ProductList products={productsWithoutRedux} info={productInfo} />
+            )}
           </Col>
         </Row>
       </Container>
-
-
     </div>
   );
 }
